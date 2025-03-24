@@ -1,0 +1,19 @@
+name: Run AEM Code Quality Pipeline
+
+on:
+  push:
+    branches:
+      - 'feature/*'   # Runs on all feature branches
+
+jobs:
+  trigger-code-quality:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Trigger Adobe Cloud Manager Code Quality Pipeline
+        run: |
+          curl -X POST "https://cloudmanager.adobe.io/api/programs/${{ secrets.ADOBE_PROGRAMID }}/pipelines/${{ secrets.ADOBE_PIPELINEID }}/execution" \
+            -H "Authorization: Bearer ${{ secrets.ADOBE_KEY}}" \
+            -H "x-gw-ims-org-id: ${{ secrets.ADOBE_IMSORGID }}" \
+            -H "x-api-key: ${{ secrets.ADOBE_APIKEY }}" \
+            -H "Content-Type: application/json"
