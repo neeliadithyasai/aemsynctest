@@ -31,7 +31,7 @@ jobs:
       - name: Determine current branch and push to Adobe Git
         run: |
           BRANCH=$(git rev-parse --abbrev-ref HEAD)
-          if [[ "$BRANCH" == "develop" || "$BRANCH" == "master" ]]; then
+          if [[ "$BRANCH" == "develop" || "$BRANCH" == "main" ]]; then
             git push adobe $BRANCH
             echo "✅ Successfully pushed $BRANCH to Adobe Git"
           else
