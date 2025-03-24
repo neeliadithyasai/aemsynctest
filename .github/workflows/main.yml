@@ -26,7 +26,7 @@ jobs:
       - name: Authenticate with Adobe Git
         run: |
           git config --global credential.helper store
-          echo "https://${{ secrets.ADOBE_UN }}:${{ secrets.ADOBE_PASS }}@git.cloudmanager.adobe.com/munvopartnersandbox/github-sync/ > ~/.git-credentials
+          echo "https://${{ secrets.ADOBE_UN }}:${{ secrets.ADOBE_PASS }}@git.cloudmanager.adobe.com/munvopartnersandbox/github-sync/" > ~/.git-credentials
 
       - name: Determine current branch and push to Adobe Git
         run: |
