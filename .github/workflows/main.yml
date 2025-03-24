@@ -19,13 +19,13 @@ jobs:
         id: auth
         with:
           command: oauth_sts
-          CLIENTID: ${{ secrets.ADOBE_CLIENTID }}
-          CLIENTSECRET: ${{ secrets.ADOBE_CLIENTSECRET }}
-          TECHNICALACCOUNTID: ${{ secrets.ADOBE_TECHNICALACCOUNTID }}
-          TECHNICALACCOUNTEMAIL: ${{ secrets.ADOBE_TECHNICALEMAIL }}
-          IMSORGID: ${{ secrets.ADOBE_IMSORGID }}
-          SCOPES: 'ent_cloudmgr, openid, AdobeID, read_organizations, additional_info.projectedProductContext, read_pc.dma_aem_ams'
-          OAUTHENABLED: 'true'
+          clientid: ${{ secrets.ADOBE_CLIENTID }}
+          clientsecret: ${{ secrets.ADOBE_CLIENTSECRET }}
+          technicalaccountid: ${{ secrets.ADOBE_TECHNICALACCOUNTID }}
+          technicalaccountemail: ${{ secrets.ADOBE_TECHNICALEMAIL }}
+          imsorgid: ${{ secrets.ADOBE_IMSORGID }}
+          scopes: 'ent_cloudmgr, openid, AdobeID, read_organizations, additional_info.projectedProductContext, read_pc.dma_aem_ams'
+          oauthenabled: 'true'
 
       - name: Output OAuth Token for Debugging
         run: |
