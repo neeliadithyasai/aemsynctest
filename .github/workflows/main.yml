@@ -38,7 +38,7 @@ jobs:
 
       - name: Add Adobe Git remote if not exists
         run: |
-          OAUTH_TOKEN="${{ steps.auth.outputs }}"
+          OAUTH_TOKEN="${{ steps.auth.outputs.token }}"
           git remote add adobe https://oauth2:${OAUTH_TOKEN}@git.cloudmanager.adobe.com/munvopartnersandbox/github-sync/
 
       - name: Determine current branch and push to Adobe Git
