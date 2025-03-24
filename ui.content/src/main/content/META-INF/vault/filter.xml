@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workspaceFilter version="1.0">
+    <filter root="/conf/githubsync" mode="merge"/>
+    <filter root="/content/githubsync" mode="merge"/>
+    <filter root="/content/dam/githubsync" mode="merge">
+        <exclude pattern="/content/dam/githubsync(/.*)?"/>
+        <include pattern="/content/dam/githubsync/jcr:content(/.*)?"/>
+    </filter>
+    <filter root="/content/dam/githubsync/asset.jpg" mode="merge"/>
+    <filter root="/content/experience-fragments/githubsync" mode="merge"/>
+    <filter root="/content/dam/formsanddocuments-themes/githubsync" mode="merge"/>
+    <filter root="/content/dam/formsanddocuments-fdm/githubsync" mode="merge"/>
+    <filter root="/content/dam/githubsync/sample_logo.png" mode="merge"/>
+    <filter root="/content/dam/githubsync/sample_terms.png" mode="merge"/>
+    <filter root="/content/dam/githubsync/wknd_logo.png" mode="merge"/>
+</workspaceFilter>

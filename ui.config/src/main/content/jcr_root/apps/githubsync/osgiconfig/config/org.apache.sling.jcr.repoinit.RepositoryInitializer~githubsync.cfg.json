@@ -1,0 +1,7 @@
+{
+    "scripts": [
+        "create path (sling:OrderedFolder) /content/dam/githubsync",
+        "create path (nt:unstructured) /content/dam/githubsync/jcr:content",
+        "set properties on /content/dam/githubsync/jcr:content\n  set cq:conf{String} to /conf/githubsync\n  set jcr:title{String} to \"github sync\"\nend"
+    ]
+}
