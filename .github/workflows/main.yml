@@ -3,8 +3,9 @@ name: Sync to Adobe Git
 on:
   push:
     branches: ["main","develop"]
+
 jobs:
-   sync:
+  sync:
     runs-on: ubuntu-latest
 
     steps:
@@ -13,19 +14,6 @@ jobs:
         with:
           fetch-depth: 0  
 
-      - name: Authenticate with Adobe I/O
-        uses: adobe/aio-apps-action@2.0.1
-        with:
-          command: auth
-          CLIENTID: ${{ secrets.ADOBE_CLIENTID }}
-          CLIENTSECRET: ${{ secrets.ADOBE_CLIENTSECRET }}
-          TECHNICALACCOUNTID: ${{ secrets.ADOBE_TECHNICALACCOUNTID }}
-          TECHNICALACCOUNTEMAIL: ${{ secrets.ADOBE_TECHNICALEMAIL }}
-          IMSORGID: ${{ secrets.ADOBE_IMSORGID }}
-          SCOPES: 'ent_cloudmgr, openid, AdobeID, read_organizations, additional_info.projectedProductContext, read_pc.dma_aem_ams'
-          OAUTHENABLED: 'true'
-          cli.bare-output: 'true' 
-          
       - name: Configure Git
         run: |
           git config --global user.name "GitHub Actions"
@@ -33,7 +21,12 @@ jobs:
 
       - name: Add Adobe Git remote if not exists
         run: |
-           git remote add adobe https://git.cloudmanager.adobe.com/munvopartnersandbox/github-sync/
+          git remote add adobe https://git.cloudmanager.adobe.com/munvopartnersandbox/github-sync/
+
+      - name: Authenticate with Adobe Git
+        run: |
+          git config --global credential.helper store
+          echo "https://${{ secrets.ADOBE_UN }}:${{ secrets.ADOBE_PASS }}@git.cloudmanager.adobe.com/munvopartnersandbox/github-sync/ > ~/.git-credentials
 
       - name: Determine current branch and push to Adobe Git
         run: |
