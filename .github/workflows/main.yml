@@ -15,6 +15,7 @@ jobs:
 
       - name: Authenticate with Adobe I/O
         uses: adobe/aio-apps-action@2.0.1
+        id: auth
         with:
           command: oauth_sts
           CLIENTID: ${{ secrets.ADOBE_CLIENTID }}
