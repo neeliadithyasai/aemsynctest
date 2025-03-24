@@ -49,3 +49,4 @@ jobs:
             echo "✅ Successfully pushed $BRANCH to Adobe Git"
           else
             echo "⏭ Skipping sync for branch: $BRANCH"
+          fi
