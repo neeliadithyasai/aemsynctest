@@ -25,7 +25,7 @@ jobs:
           technicalaccountemail: ${{ secrets.ADOBE_TECHNICALEMAIL }}
           imsorgid: ${{ secrets.ADOBE_IMSORGID }}
           scopes: 'ent_cloudmgr, openid, AdobeID, read_organizations, additional_info.projectedProductContext, read_pc.dma_aem_ams'
-          oauthenabled: 'true'
+         
 
       - name: Output OAuth Token for Debugging
         run: |
