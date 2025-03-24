@@ -30,9 +30,11 @@ jobs:
         run: |
           echo "Environment variables:"
           printenv
-      - name: Output OAuth Token for Debugging
+      - name: Debug OAuth Authentication
         run: |
-          echo "OAuth Token: ${{ steps.auth.outputs.token }}"
+          set -x
+          echo "OAuth Token from step: ${{ steps.auth.outputs.token }}"
+          echo "OAuth Token from env: $OAUTH_TOKEN"
 
       - name: Configure Git
         run: |
