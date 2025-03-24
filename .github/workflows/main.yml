@@ -14,7 +14,7 @@ jobs:
           fetch-depth: 0  
 
       - name: Authenticate with Adobe I/O
-        uses: adobe/aio-apps-action@2.0.1
+        uses: adobe/aio-apps-action@3.4.0
         id: auth
         with:
           command: oauth_sts
