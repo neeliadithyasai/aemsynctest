@@ -2,16 +2,17 @@ name: Sync to Adobe Git
 
 on:
   push:
-    branches: ["main","develop"]
+    branches: ["main", "develop"]
+
 jobs:
-   sync:
+  sync:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout GitHub repo
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0  
+          fetch-depth: 0  # To fetch all history for the branch
 
       - name: Authenticate with Adobe I/O
         uses: adobe/aio-apps-action@3.4.0
@@ -29,7 +30,7 @@ jobs:
       - name: Output OAuth Token for Debugging
         run: |
           echo "OAuth Token: ${{ steps.auth.outputs.token }}"
-          
+
       - name: Configure Git
         run: |
           git config --global user.name "GitHub Actions"
@@ -37,7 +38,7 @@ jobs:
 
       - name: Add Adobe Git remote if not exists
         run: |
-          OAUTH_TOKEN="${{steps.authenticate.outputs.token }}
+          OAUTH_TOKEN="${{ steps.auth.outputs.token }}"
           git remote add adobe https://oauth2:${OAUTH_TOKEN}@git.cloudmanager.adobe.com/munvopartnersandbox/github-sync/
 
       - name: Determine current branch and push to Adobe Git
@@ -48,4 +49,3 @@ jobs:
             echo "✅ Successfully pushed $BRANCH to Adobe Git"
           else
             echo "⏭ Skipping sync for branch: $BRANCH"
-          fi
