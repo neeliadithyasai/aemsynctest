@@ -24,6 +24,10 @@ jobs:
           IMSORGID: ${{ secrets.ADOBE_IMSORGID }}
           SCOPES: 'ent_cloudmgr, openid, AdobeID, read_organizations, additional_info.projectedProductContext, read_pc.dma_aem_ams'
           OAUTHENABLED: 'true'
+
+      - name: Output OAuth Token for Debugging
+        run: |
+          echo "OAuth Token: ${{ steps.auth.outputs.token }}"
           
       - name: Configure Git
         run: |
@@ -32,7 +36,7 @@ jobs:
 
       - name: Add Adobe Git remote if not exists
         run: |
-          OAUTH_TOKEN=$(echo ${{ steps.authenticate.outputs.token }})
+          OAUTH_TOKEN="${{steps.authenticate.outputs.token }}
           git remote add adobe https://oauth2:${OAUTH_TOKEN}@git.cloudmanager.adobe.com/munvopartnersandbox/github-sync/
 
       - name: Determine current branch and push to Adobe Git
