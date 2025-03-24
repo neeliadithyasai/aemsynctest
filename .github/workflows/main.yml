@@ -31,6 +31,8 @@ jobs:
           echo "Environment variables:"
           printenv
       - name: Debug OAuth Authentication
+        env:
+          AIO_IMS_CONTEXTS_CLI_ACCESS__TOKEN_TOKEN: ${{ env.AIO_IMS_CONTEXTS_CLI_ACCESS__TOKEN_TOKEN }}
         run: |
           set -x
           echo "OAuth Token from step: ${{ steps.auth.outputs.token }}"
@@ -43,7 +45,7 @@ jobs:
 
       - name: Add Adobe Git remote if not exists
         run: |
-          OAUTH_TOKEN="${{ AIO_IMS_CONTEXTS_CLI_ACCESS__TOKEN_TOKEN}}"
+          OAUTH_TOKEN="${{ steps.auth.outputs.token }}"
           echo $OAUTH_TOKEN
           git remote add adobe https://oauth2:$OAUTH_TOKEN@git.cloudmanager.adobe.com/munvopartnersandbox/github-sync/
 
