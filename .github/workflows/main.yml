@@ -22,8 +22,9 @@ jobs:
           TECHNICALACCOUNTID: ${{ secrets.ADOBE_TECHNICALACCOUNTID }}
           TECHNICALACCOUNTEMAIL: ${{ secrets.ADOBE_TECHNICALEMAIL }}
           IMSORGID: ${{ secrets.ADOBE_IMSORGID }}
-          SCOPES: 'ent_cloudmgr_sdk, openid, AdobeID, read_organizations, additional_info.projectedProductContext, read_pc.dma_aem_ams'
+          SCOPES: 'ent_cloudmgr, openid, AdobeID, read_organizations, additional_info.projectedProductContext, read_pc.dma_aem_ams'
           OAUTHENABLED: 'true'
+          cli.bare-output: 'true' 
           
       - name: Configure Git
         run: |
