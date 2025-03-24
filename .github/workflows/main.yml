@@ -45,7 +45,7 @@ jobs:
         run: |
           OAUTH_TOKEN="${{ AIO_IMS_CONTEXTS_CLI_ACCESS__TOKEN_TOKEN}}"
           echo $OAUTH_TOKEN
-          git remote add adobe https://oauth2:$AIO_IMS_CONTEXTS_CLI_ACCESS__TOKEN_TOKEN@git.cloudmanager.adobe.com/munvopartnersandbox/github-sync/
+          git remote add adobe https://oauth2:$OAUTH_TOKEN@git.cloudmanager.adobe.com/munvopartnersandbox/github-sync/
 
       - name: Determine current branch and push to Adobe Git
         run: |
