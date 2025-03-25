@@ -1,4 +1,4 @@
-name: Sync to Adobe Git
+name: run pipeline
 
 on:
   push:
@@ -25,36 +25,10 @@ jobs:
           technicalaccountemail: ${{ secrets.ADOBE_TECHNICALEMAIL }}
           imsorgid: ${{ secrets.ADOBE_IMSORGID }}
           scopes: 'ent_cloudmgr, openid, AdobeID, read_organizations, additional_info.projectedProductContext, read_pc.dma_aem_ams'
-         
-      - name: Check environment variables
-        run: |
-          echo "Environment variables:"
-          printenv
-      - name: Debug OAuth Authentication
-        env:
-          AIO_IMS_CONTEXTS_CLI_ACCESS__TOKEN_TOKEN: ${{ env.AIO_IMS_CONTEXTS_CLI_ACCESS__TOKEN_TOKEN }}
-        run: |
-          set -x
-          echo "OAuth Token from step: ${{ steps.auth.outputs.token }}"
-          echo $AIO_IMS_CONTEXTS_CLI_ACCESS__TOKEN_TOKEN
 
-      - name: Configure Git
-        run: |
-          git config --global user.name "GitHub Actions"
-          git config --global user.email "actions@github.com"
-
-      - name: Add Adobe Git remote if not exists
-        run: |
-          OAUTH_TOKEN="${{ steps.auth.outputs.token }}"
-          echo $OAUTH_TOKEN
-          git remote add adobe https://oauth2:$OAUTH_TOKEN@git.cloudmanager.adobe.com/munvopartnersandbox/github-sync/
-
-      - name: Determine current branch and push to Adobe Git
-        run: |
-          BRANCH=$(git rev-parse --abbrev-ref HEAD)
-          if [[ "$BRANCH" == "develop" || "$BRANCH" == "main" ]]; then
-            git push adobe $BRANCH
-            echo "✅ Successfully pushed $BRANCH to Adobe Git "
-          else
-            echo "⏭ Skipping sync for branch: $BRANCH"
-          fi
+      - name: Create Execution
+        uses: adobe/aio-cloudmanager-create-execution-action@v1.2.0
+        with:
+          PIPELINEID: ${{ secrets.ADOBE_PIPELINEID }}
+          PROGRAMID: ${{ secrets.ADOBE_PROGRAMID }}
+          IMSORGID: ${{ secrets.ADOBE_IMSORGID }}
