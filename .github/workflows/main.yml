@@ -25,13 +25,6 @@ jobs:
           technicalaccountemail: ${{ secrets.ADOBE_TECHNICALEMAIL }}
           imsorgid: ${{ secrets.ADOBE_IMSORGID }}
           scopes: 'ent_cloudmgr, openid, AdobeID, read_organizations, additional_info.projectedProductContext, read_pc.dma_aem_ams'
-
-      - name: Create Execution
-        uses: adobe/aio-cloudmanager-create-execution-action@v1.2.0
-        with:
-          PIPELINEID: ${{ secrets.ADOBE_PIPELINEID }}
-          PROGRAMID: ${{ secrets.ADOBE_PROGRAMID }}
-          IMSORGID: ${{ secrets.ADOBE_IMSORGID }}
       
       - name: Check Code Quality Pipeline Status
         run: |
@@ -41,9 +34,7 @@ jobs:
           IMS_ORG=${{ secrets.ADOBE_IMSORGID }}
 
           while [[ "$STATUS" == "RUNNING" || "$STATUS" == "NOT_STARTED" ]]; do
-            RESPONSE=$(curl -s -X GET "https://cloudmanager.adobe.io/api/programs/$PROGRAM_ID/pipelines/$PIPELINE_ID/executions" \
-              -H "x-gw-ims-org-id: $IMS_ORG" \
-              -H "Authorization: Bearer ${{ secrets.ADOBE_ACCESS_TOKEN }}")
+            RESPONSE=$(curl -s -X GET "https://cloudmanager.adobe.io/api/programs/$PROGRAM_ID/pipelines/$PIPELINE_ID/executions" -H "x-gw-ims-org-id: $IMS_ORG" -H "Authorization: Bearer ${{ secrets.ADOBE_ACCESS_TOKEN }}")
             
             STATUS=$(echo "$RESPONSE" | jq -r '.items[0].status')
             echo "Current Code Quality Status: $STATUS"
