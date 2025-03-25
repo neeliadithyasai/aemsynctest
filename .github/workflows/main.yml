@@ -32,3 +32,31 @@ jobs:
           PIPELINEID: ${{ secrets.ADOBE_PIPELINEID }}
           PROGRAMID: ${{ secrets.ADOBE_PROGRAMID }}
           IMSORGID: ${{ secrets.ADOBE_IMSORGID }}
+      
+      - name: Check Code Quality Pipeline Status
+        run: |
+          STATUS="RUNNING"
+          PIPELINE_ID=${{ secrets.ADOBE_CODE_QUALITY_PIPELINEID }}
+          PROGRAM_ID=${{ secrets.ADOBE_PROGRAMID }}
+          IMS_ORG=${{ secrets.ADOBE_IMSORGID }}
+
+          while [[ "$STATUS" == "RUNNING" || "$STATUS" == "NOT_STARTED" ]]; do
+            RESPONSE=$(curl -s -X GET "https://cloudmanager.adobe.io/api/programs/$PROGRAM_ID/pipelines/$PIPELINE_ID/executions" \
+              -H "x-gw-ims-org-id: $IMS_ORG" \
+              -H "Authorization: Bearer ${{ secrets.ADOBE_ACCESS_TOKEN }}")
+            
+            STATUS=$(echo "$RESPONSE" | jq -r '.items[0].status')
+            echo "Current Code Quality Status: $STATUS"
+
+            if [[ "$STATUS" == "CANCELLED" || "$STATUS" == "FAILED" ]]; then
+              echo "❌ Code Quality Failed!"
+              exit 1
+            fi
+
+            if [[ "$STATUS" == "FINISHED" ]]; then
+              echo "✅ Code Quality Passed!"
+              exit 0
+            fi
+
+            sleep 30
+          done
