@@ -1,8 +1,8 @@
-name: run pipeline
+name: Sync to Adobe Git
 
 on:
   push:
-    branches: ["main", "develop"]
+    branches: ["main", "develop", "feature/*"]
 
 jobs:
   sync:
@@ -12,42 +12,28 @@ jobs:
       - name: Checkout GitHub repo
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # To fetch all history for the branch
+          fetch-depth: 0  
 
-      - name: Authenticate with Adobe I/O
-        uses: adobe/aio-apps-action@3.4.0
-        id: auth
-        with:
-          command: oauth_sts
-          clientid: ${{ secrets.ADOBE_CLIENTID }}
-          clientsecret: ${{ secrets.ADOBE_CLIENTSECRET }}
-          technicalaccountid: ${{ secrets.ADOBE_TECHNICALACCOUNTID }}
-          technicalaccountemail: ${{ secrets.ADOBE_TECHNICALEMAIL }}
-          imsorgid: ${{ secrets.ADOBE_IMSORGID }}
-          scopes: 'ent_cloudmgr, openid, AdobeID, read_organizations, additional_info.projectedProductContext, read_pc.dma_aem_ams'
-      
-      - name: Check Code Quality Pipeline Status
+      - name: Configure Git
         run: |
-          STATUS="RUNNING"
-          PIPELINE_ID=${{ secrets.ADOBE_CODE_QUALITY_PIPELINEID }}
-          PROGRAM_ID=${{ secrets.ADOBE_PROGRAMID }}
-          IMS_ORG=${{ secrets.ADOBE_IMSORGID }}
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
 
-          while [[ "$STATUS" == "RUNNING" || "$STATUS" == "NOT_STARTED" ]]; do
-            RESPONSE=$(curl -s -X GET "https://cloudmanager.adobe.io/api/programs/$PROGRAM_ID/pipelines/$PIPELINE_ID/executions" -H "x-gw-ims-org-id: $IMS_ORG" -H "Authorization: Bearer ${{ secrets.ADOBE_ACCESS_TOKEN }}")
-            
-            STATUS=$(echo "$RESPONSE" | jq -r '.items[0].status')
-            echo "Current Code Quality Status: $STATUS"
+      - name: Add Adobe Git remote 
+        run: |
+          if git remote | grep -q adobe; then
+            echo "Adobe remote already exists."
+          else
+            git remote add adobe https://${{secrets.ADOBE_UN}}:${{secrets.ADOBE_PASS}}@git.cloudmanager.adobe.com/munvopartnersandbox/github-sync/
+          fi
+          git fetch adobe
 
-            if [[ "$STATUS" == "CANCELLED" || "$STATUS" == "FAILED" ]]; then
-              echo "❌ Code Quality Failed!"
-              exit 1
-            fi
-
-            if [[ "$STATUS" == "FINISHED" ]]; then
-              echo "✅ Code Quality Passed!"
-              exit 0
-            fi
-
-            sleep 30
-          done
+      - name: Determine current branch and push to Adobe Git
+        run: |
+          BRANCH=$(git rev-parse --abbrev-ref HEAD)
+          if [[ "$BRANCH" == "develop" || "$BRANCH" == "main" || "$BRANCH" =~ ^feature/.* ]]; then
+            git push adobe $BRANCH
+            echo "✅ Successfully pushed $BRANCH to Adobe Git"
+          else
+            echo "⏭ Skipping sync for branch: $BRANCH"
+          fi
